@@ -8,5 +8,5 @@ postgres:
   port: 5432
   user: postgres
   password: postgres
-  dbname: task_management
+  name: task_management
   sslMode: disable

@@ -19,8 +19,8 @@ LABEL name="app-image"
 
 WORKDIR /root/
 
-COPY --from=builder /app/main .
+COPY --from=builder /app/task-manager .
 
 COPY --from=builder /app/config ./config
 
-CMD ["./main"]
+CMD ["./task-manager"]

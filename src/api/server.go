@@ -1,39 +1,31 @@
 package api
 
 import (
-	"github.com/MrRezoo/code-challenge/api/middlewares"
-	"github.com/MrRezoo/code-challenge/api/routers"
-	"github.com/MrRezoo/code-challenge/config"
-	"github.com/MrRezoo/code-challenge/db"
+	"github.com/MrRezoo/TaskManagement/api/helpers"
+	"github.com/MrRezoo/TaskManagement/api/middlewares"
+	"github.com/MrRezoo/TaskManagement/api/routers"
+	"github.com/MrRezoo/TaskManagement/config"
+	"github.com/MrRezoo/TaskManagement/db"
+	"github.com/gofiber/fiber/v2"
 	"log"
-	"net/http"
-	"os"
 )
 
-func initServer() *http.ServeMux {
-	cfg := config.GetConfig()
+func SetupServer() *fiber.App {
+	app := fiber.New()
 
-	db.InitRedis(&cfg.Redis)
+	app.Use(middlewares.CorsMiddleware())
+	app.Use(middlewares.LoggingMiddleware())
 
-	mux := http.NewServeMux()
+	routers.SetupRoutes(app)
 
-	muxWithMiddlewares := http.NewServeMux()
-	muxWithMiddlewares.Handle("/", middlewares.Logging(middlewares.CORS(mux)))
-	{
-
-		routers.HealthRouter(mux)
-		routers.UserRouter(mux)
-	}
-	return muxWithMiddlewares
+	return app
 }
 
-func ServeMux() {
+func Serve() {
 	cfg := config.GetConfig()
-	serveMux := initServer()
-	log.Printf("⚠️ Server is started on localhost:%s ⚠️", cfg.Server.Port)
-	err := http.ListenAndServe(":"+cfg.Server.Port, serveMux)
-	if err != nil {
-		log.Printf("Failed to start server on %s: %v", cfg.Server.Port, err)
-		os.Exit(1)
-	}
+	db.ConnectPostgres(&cfg.Postgres)
+	app := SetupServer()
+	helpers.ListRoutes(app)
+	log.Fatal(app.Listen(":" + cfg.Server.Port))
+
 }

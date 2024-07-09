@@ -1,12 +1,12 @@
 package routers
 
 import (
-	"github.com/MrRezoo/code-challenge/api/handlers"
-	"net/http"
+	"github.com/MrRezoo/TaskManagement/api/handlers"
+	"github.com/gofiber/fiber/v2"
 )
 
-func HealthRouter(mux *http.ServeMux) {
-	handler := handlers.NewHealthHandler()
+func SetupHealthRoutes(router fiber.Router) {
+	healthHandler := handlers.NewHealthHandler()
 
-	mux.HandleFunc("/health/", handler.Health)
+	router.Get("/health/", healthHandler.Check)
 }

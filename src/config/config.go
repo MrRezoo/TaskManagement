@@ -8,9 +8,9 @@ import (
 )
 
 type Config struct {
-	Server ServerConfig
-	Cors   CorsConfig
-	Redis  RedisConfig
+	Server   ServerConfig
+	Cors     CorsConfig
+	Postgres PostgresConfig
 }
 
 type ServerConfig struct {
@@ -25,9 +25,10 @@ type CorsConfig struct {
 type PostgresConfig struct {
 	Host     string
 	Port     string
+	Name     string
 	User     string
 	Password string
-	DbName   string
+	SSLMode  string
 }
 
 func GetConfig() *Config {

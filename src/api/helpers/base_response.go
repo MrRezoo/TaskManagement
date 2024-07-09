@@ -1,6 +1,6 @@
 package helpers
 
-import "github.com/MrRezoo/code-challenge/api/validations"
+import "github.com/MrRezoo/TaskManagement/api/validations"
 
 type BaseHttpResponse struct {
 	Result           any                            `json:"result"`
@@ -18,7 +18,7 @@ func GenerateBaseResponse(result any, success bool, code int) *BaseHttpResponse 
 	}
 }
 
-func GenerateBaseResponseWithError(result any, success bool, code int, err error) *BaseHttpResponse {
+func GenerateResponseWithError(result any, success bool, code int, err error) *BaseHttpResponse {
 	return &BaseHttpResponse{
 		Result:  result,
 		Success: success,
@@ -27,7 +27,7 @@ func GenerateBaseResponseWithError(result any, success bool, code int, err error
 	}
 }
 
-func GenerateBaseResponseWithValidationErrors(result any, success bool, code int, err error) *BaseHttpResponse {
+func GenerateResponseWithValidationErrors(result any, success bool, code int, err error) *BaseHttpResponse {
 	return &BaseHttpResponse{
 		Result:           result,
 		Success:          success,

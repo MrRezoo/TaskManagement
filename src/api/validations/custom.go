@@ -1,7 +1,6 @@
 package validations
 
 import (
-	"errors"
 	"github.com/go-playground/validator/v10"
 )
 
@@ -14,9 +13,8 @@ type ValidationError struct {
 
 func GetValidationErrors(err error) *[]ValidationError {
 	var validationErrors []ValidationError
-	var ve validator.ValidationErrors
-	if errors.As(err, &ve) {
-		for _, err := range err.(validator.ValidationErrors) {
+	if errs, ok := err.(validator.ValidationErrors); ok {
+		for _, err := range errs {
 			validationErrors = append(validationErrors, ValidationError{
 				Property: err.Field(),
 				Tag:      err.Tag(),
@@ -24,7 +22,6 @@ func GetValidationErrors(err error) *[]ValidationError {
 				Message:  err.Error(),
 			})
 		}
-		return &validationErrors
 	}
-	return nil
+	return &validationErrors
 }

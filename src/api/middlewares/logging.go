@@ -1,8 +1,8 @@
 package middlewares
 
 import (
+	"github.com/gofiber/fiber/v2"
 	"log"
-	"net/http"
 )
 
 const (
@@ -12,28 +12,18 @@ const (
 	bgColorLightBlue = "\033[44m"
 )
 
-type responseWriter struct {
-	http.ResponseWriter
-	statusCode int
-}
+func LoggingMiddleware() fiber.Handler {
+	return func(c *fiber.Ctx) error {
+		err := c.Next()
 
-func (rw *responseWriter) WriteHeader(code int) {
-	rw.statusCode = code
-	rw.ResponseWriter.WriteHeader(code)
-}
-
-func Logging(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		customWriter := &responseWriter{ResponseWriter: w, statusCode: http.StatusOK}
-
-		next.ServeHTTP(customWriter, r)
-
-		statusCode := customWriter.statusCode
+		statusCode := c.Response().StatusCode()
 		color := colorCyan
 		if statusCode >= 400 && statusCode < 500 {
 			color = colorRed
 		}
 
-		log.Printf("%s%s %s %d %s%s%s", color, r.Method, r.URL.Path, statusCode, bgColorLightBlue, colorReset, colorReset)
-	})
+		log.Printf("%s%s %s %d %s%s%s", color, c.Method(), c.Path(), statusCode, bgColorLightBlue, colorReset, colorReset)
+
+		return err
+	}
 }
