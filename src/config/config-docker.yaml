@@ -1,0 +1,12 @@
+Server:
+  port: 5005
+  runMode: debug
+cors:
+  allowedOrigins: "*"
+postgres:
+  host: postgres_container
+  port: 5432
+  user: postgres
+  password: postgres
+  dbname: task_management
+  sslMode: disable
