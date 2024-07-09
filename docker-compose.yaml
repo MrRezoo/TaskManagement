@@ -5,7 +5,7 @@ services:
     container_name: app_container
     image: app-image
     build:
-      context: ./server
+      context: ./src
       dockerfile: Dockerfile
     environment:
       - APP_ENV=docker
