@@ -1,11 +1,12 @@
 package handlers
 
 import (
+	"github.com/MrRezoo/TaskManagement/api/helpers"
 	"github.com/MrRezoo/TaskManagement/api/models"
+	"github.com/MrRezoo/TaskManagement/api/validations"
 	"github.com/MrRezoo/TaskManagement/db"
 	"github.com/gofiber/fiber/v2"
 	"github.com/google/uuid"
-	"log"
 )
 
 type TaskHandler struct{}
@@ -17,61 +18,64 @@ func NewTaskHandler() *TaskHandler {
 func (h *TaskHandler) CreateTask(c *fiber.Ctx) error {
 	task := new(models.Task)
 	if err := c.BodyParser(task); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid input"})
+		return c.Status(fiber.StatusBadRequest).JSON(helpers.GenerateResponseWithError(nil, false, fiber.StatusBadRequest, err))
 	}
+
+	// Validate the task
+	if err := validations.Validate.Struct(task); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(helpers.GenerateResponseWithValidationErrors(nil, false, fiber.StatusBadRequest, err))
+	}
+
 	task.ID = uuid.New()
-	db.DB.Create(&task)
-	return c.Status(fiber.StatusCreated).JSON(task)
+	if result := db.DB.Create(&task); result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(helpers.GenerateResponseWithError(nil, false, fiber.StatusInternalServerError, result.Error))
+	}
+	return c.Status(fiber.StatusCreated).JSON(helpers.GenerateBaseResponse(task, true, fiber.StatusCreated))
 }
 
 func (h *TaskHandler) GetTasks(c *fiber.Ctx) error {
 	var tasks []models.Task
-
-	// Check if DB is initialized
-	if db.DB == nil {
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Database connection not initialized",
-		})
+	if result := db.DB.Find(&tasks); result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(helpers.GenerateResponseWithError(nil, false, fiber.StatusInternalServerError, result.Error))
 	}
-
-	// Fetch tasks from database
-	result := db.DB.Find(&tasks)
-	if result.Error != nil {
-		log.Printf("Failed to fetch tasks: %v", result.Error)
-		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
-			"error": "Failed to fetch tasks",
-		})
-	}
-
-	return c.JSON(tasks)
+	return c.JSON(helpers.GenerateBaseResponse(tasks, true, fiber.StatusOK))
 }
 
 func (h *TaskHandler) GetTask(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var task models.Task
 	if result := db.DB.First(&task, "id = ?", id); result.Error != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Task not found"})
+		return c.Status(fiber.StatusNotFound).JSON(helpers.GenerateResponseWithError(nil, false, fiber.StatusNotFound, result.Error))
 	}
-	return c.JSON(task)
+	return c.JSON(helpers.GenerateBaseResponse(task, true, fiber.StatusOK))
 }
 
 func (h *TaskHandler) UpdateTask(c *fiber.Ctx) error {
 	id := c.Params("id")
 	var task models.Task
 	if result := db.DB.First(&task, "id = ?", id); result.Error != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Task not found"})
+		return c.Status(fiber.StatusNotFound).JSON(helpers.GenerateResponseWithError(nil, false, fiber.StatusNotFound, result.Error))
 	}
+
 	if err := c.BodyParser(&task); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": "Invalid input"})
+		return c.Status(fiber.StatusBadRequest).JSON(helpers.GenerateResponseWithError(nil, false, fiber.StatusBadRequest, err))
 	}
-	db.DB.Save(&task)
-	return c.JSON(task)
+
+	// Validate the task
+	if err := validations.Validate.Struct(&task); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(helpers.GenerateResponseWithValidationErrors(nil, false, fiber.StatusBadRequest, err))
+	}
+
+	if result := db.DB.Save(&task); result.Error != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(helpers.GenerateResponseWithError(nil, false, fiber.StatusInternalServerError, result.Error))
+	}
+	return c.JSON(helpers.GenerateBaseResponse(task, true, fiber.StatusOK))
 }
 
 func (h *TaskHandler) DeleteTask(c *fiber.Ctx) error {
 	id := c.Params("id")
 	if result := db.DB.Delete(&models.Task{}, "id = ?", id); result.Error != nil {
-		return c.Status(fiber.StatusNotFound).JSON(fiber.Map{"error": "Task not found"})
+		return c.Status(fiber.StatusNotFound).JSON(helpers.GenerateResponseWithError(nil, false, fiber.StatusNotFound, result.Error))
 	}
-	return c.SendStatus(fiber.StatusNoContent)
+	return c.Status(fiber.StatusNoContent).JSON(helpers.GenerateBaseResponse(nil, true, fiber.StatusNoContent))
 }

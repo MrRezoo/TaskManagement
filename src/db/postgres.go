@@ -11,6 +11,7 @@ import (
 var DB *gorm.DB
 
 func ConnectPostgres(cfg *config.PostgresConfig) {
+	createDatabase(cfg)
 	dsn := "host=" + cfg.Host + " user=" + cfg.User + " password=" + cfg.Password + " dbname=" + cfg.Name + " port=" + cfg.Port + " sslmode=" + cfg.SSLMode
 	var err error
 	DB, err = gorm.Open(postgres.Open(dsn), &gorm.Config{})
@@ -18,8 +19,33 @@ func ConnectPostgres(cfg *config.PostgresConfig) {
 		log.Fatalf("Failed to connect to database: %v", err)
 	}
 	log.Println("Database connected")
+
+	err = enableUUIDExtension(DB)
+	if err != nil {
+		log.Fatalf("Failed to enable uuid-ossp extension: %v", err)
+	}
+
 	err = DB.AutoMigrate(&models.Task{})
 	if err != nil {
 		log.Fatalf("Failed to migrate database: %v", err)
 	}
+}
+
+func enableUUIDExtension(db *gorm.DB) error {
+	return db.Exec("CREATE EXTENSION IF NOT EXISTS \"uuid-ossp\"").Error
+}
+
+func createDatabase(cfg *config.PostgresConfig) {
+	dsn := "host=" + cfg.Host + " user=" + cfg.User + " password=" + cfg.Password + " port=" + cfg.Port + " sslmode=" + cfg.SSLMode
+	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
+	if err != nil {
+		log.Fatalf("Failed to connect to database: %v", err)
+	}
+	log.Println("Database connected")
+
+	err = db.Exec("CREATE DATABASE " + cfg.Name).Error
+	if err != nil {
+		log.Fatalf("Failed to create database: %v", err)
+	}
+	log.Println("Database created")
 }

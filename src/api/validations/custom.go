@@ -25,3 +25,9 @@ func GetValidationErrors(err error) *[]ValidationError {
 	}
 	return &validationErrors
 }
+
+var Validate *validator.Validate
+
+func init() {
+	Validate = validator.New()
+}

@@ -15,7 +15,6 @@ func SetupServer() *fiber.App {
 
 	app.Use(middlewares.CorsMiddleware())
 	app.Use(middlewares.LoggingMiddleware())
-
 	routers.SetupRoutes(app)
 
 	return app
@@ -27,5 +26,4 @@ func Serve() {
 	app := SetupServer()
 	helpers.ListRoutes(app)
 	log.Fatal(app.Listen(":" + cfg.Server.Port))
-
 }
