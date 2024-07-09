@@ -1,0 +1,614 @@
+{
+	"info": {
+		"_postman_id": "6382cdb7-da2e-40f2-856b-8e2398a596c3",
+		"name": "Task-Management",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "36182462"
+	},
+	"item": [
+		{
+			"name": "Heath-Check",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"description": "\nThe `GET` request to `/api/health/` endpoint is used to retrieve the health status of the API.\n\n### Response\nThe response returns a JSON object with the following properties:\n\n- `message` (string, optional): A message related to the health status.\n- `success` (boolean): Indicates the success of the health check.\n\nExample:\n```json\n{\n    \"message\": \"\",\n    \"success\": true\n}\n```\n"
+			},
+			"response": []
+		},
+		{
+			"name": "Tasks",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:5005/api/tasks/",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"tasks",
+						""
+					]
+				},
+				"description": "\nThe endpoint retrieves a list of tasks via an HTTP GET request to 127.0.0.1:5005/api/tasks/.\n\n### Response\nThe response is in JSON format and has the following schema:\n```json\n{\n    \"result\": [\n        {\n            \"id\": \"\",\n            \"title\": \"\",\n            \"description\": \"\",\n            \"status\": \"\",\n            \"created_at\": \"\",\n            \"updated_at\": \"\"\n        }\n    ],\n    \"success\": true,\n    \"code\": 0,\n    \"validation_errors\": null,\n    \"error\": null\n}\n```\n"
+			},
+			"response": [
+				{
+					"name": "200",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5005/api/tasks/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5005",
+							"path": [
+								"api",
+								"tasks",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 09 Jul 2024 15:39:11 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "271"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"result\": [\n        {\n            \"id\": \"3ea40a96-045a-45ae-b526-8e7f515d335e\",\n            \"title\": \"One\",\n            \"description\": \"des\",\n            \"status\": \"pending\",\n            \"created_at\": \"2024-07-09T19:08:55.994283+03:30\",\n            \"updated_at\": \"2024-07-09T19:08:55.994283+03:30\"\n        }\n    ],\n    \"success\": true,\n    \"code\": 200,\n    \"validation_errors\": null,\n    \"error\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Tasks Create",
+			"request": {
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:5005/api/tasks/",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"tasks",
+						""
+					]
+				},
+				"description": "\nThe API endpoint allows you to create a new task by sending an HTTP POST request to 127.0.0.1:5005/api/tasks/. The request should include a JSON payload in the raw request body with the following parameters:\n- \"title\": (string) The title of the task.\n- \"description\": (string) The description of the task.\n- \"status\": (string) The status of the task, which can be one of \"pending\", \"completed\", or \"in_progress\".\n\n### Response\nThe response to this request is in the form of a JSON schema. The HTTP status code is 201, and the Content-Type is application/json. The response body includes the following fields:\n- \"result\": An object containing the details of the newly created task, including \"id\", \"title\", \"description\", \"status\", \"created_at\", and \"updated_at\".\n- \"success\": A boolean value indicating the success of the request.\n- \"code\": An integer representing the status code of the response.\n- \"validation_errors\": A null value, indicating no validation errors.\n- \"error\": A null value, indicating no error.\n\nExample response:\n```json\n{\n  \"result\": {\n    \"id\": \"\",\n    \"title\": \"\",\n    \"description\": \"\",\n    \"status\": \"\",\n    \"created_at\": \"\",\n    \"updated_at\": \"\"\n  },\n  \"success\": true,\n  \"code\": 0,\n  \"validation_errors\": null,\n  \"error\": null\n}\n```\n"
+			},
+			"response": [
+				{
+					"name": "400",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"One\",\n    \"description\": \"des\",\n    \"status\": \"s\" // \"pending completed in_progress\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5005/api/tasks/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5005",
+							"path": [
+								"api",
+								"tasks",
+								""
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 09 Jul 2024 15:38:35 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "246"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"result\": null,\n    \"success\": false,\n    \"code\": 400,\n    \"validation_errors\": [\n        {\n            \"property\": \"Status\",\n            \"tag\": \"oneof\",\n            \"value\": \"pending completed in_progress\",\n            \"message\": \"Key: 'Task.Status' Error:Field validation for 'Status' failed on the 'oneof' tag\"\n        }\n    ],\n    \"error\": null\n}"
+				},
+				{
+					"name": "200",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\": \"One\",\n    \"description\": \"des\",\n    \"status\": \"pending\" // \"pending completed in_progress\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5005/api/tasks/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5005",
+							"path": [
+								"api",
+								"tasks",
+								""
+							]
+						}
+					},
+					"status": "Created",
+					"code": 201,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 09 Jul 2024 15:38:55 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "269"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"result\": {\n        \"id\": \"3ea40a96-045a-45ae-b526-8e7f515d335e\",\n        \"title\": \"One\",\n        \"description\": \"des\",\n        \"status\": \"pending\",\n        \"created_at\": \"2024-07-09T19:08:55.994283+03:30\",\n        \"updated_at\": \"2024-07-09T19:08:55.994283+03:30\"\n    },\n    \"success\": true,\n    \"code\": 201,\n    \"validation_errors\": null,\n    \"error\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Task",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:5005/api/tasks/1/",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"tasks",
+						"1",
+						""
+					]
+				},
+				"description": "\nThe endpoint retrieves a specific task identified by the provided ID. \n\nThe response for this request can be documented as a JSON schema as follows:\n\n```json\n{\n    \"type\": \"object\",\n    \"properties\": {\n        \"result\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"id\": {\"type\": \"string\"},\n                \"title\": {\"type\": \"string\"},\n                \"description\": {\"type\": \"string\"},\n                \"status\": {\"type\": \"string\"},\n                \"created_at\": {\"type\": \"string\"},\n                \"updated_at\": {\"type\": \"string\"}\n            }\n        },\n        \"success\": {\"type\": \"boolean\"},\n        \"code\": {\"type\": \"integer\"},\n        \"validation_errors\": {\"type\": \"null\"},\n        \"error\": {\"type\": \"string\"}\n    }\n}\n```\n"
+			},
+			"response": [
+				{
+					"name": "200",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5005/api/tasks/3ea40a96-045a-45ae-b526-8e7f515d335e/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5005",
+							"path": [
+								"api",
+								"tasks",
+								"3ea40a96-045a-45ae-b526-8e7f515d335e",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 09 Jul 2024 15:40:08 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "269"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"result\": {\n        \"id\": \"3ea40a96-045a-45ae-b526-8e7f515d335e\",\n        \"title\": \"One\",\n        \"description\": \"des\",\n        \"status\": \"pending\",\n        \"created_at\": \"2024-07-09T19:08:55.994283+03:30\",\n        \"updated_at\": \"2024-07-09T19:08:55.994283+03:30\"\n    },\n    \"success\": true,\n    \"code\": 200,\n    \"validation_errors\": null,\n    \"error\": null\n}"
+				},
+				{
+					"name": "404",
+					"originalRequest": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5005/api/tasks/3ea40a96-045a-45ae-b526-8e7f515d335e/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5005",
+							"path": [
+								"api",
+								"tasks",
+								"3ea40a96-045a-45ae-b526-8e7f515d335e",
+								""
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 09 Jul 2024 15:48:35 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "94"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"result\": null,\n    \"success\": false,\n    \"code\": 404,\n    \"validation_errors\": null,\n    \"error\": \"record not found\"\n}"
+				}
+			]
+		},
+		{
+			"name": "Task",
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "127.0.0.1:5005/api/tasks/1/",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"tasks",
+						"1",
+						""
+					]
+				},
+				"description": "\nThe API endpoint makes an HTTP DELETE request to delete a specific task with the given ID. Upon a successful execution, the response returns a status code of 400 and a JSON object with the following properties:\n- result: (null) The result of the operation\n- success: (boolean) Indicates whether the operation was successful\n- code: (number) Error code\n- validation_errors: (null) Any validation errors, if present\n- error: (null) Any specific error message, if present\n\nHere's the JSON schema for the response:\n```json\n{\n    \"type\": \"object\",\n    \"properties\": {\n        \"result\": { \"type\": \"null\" },\n        \"success\": { \"type\": \"boolean\" },\n        \"code\": { \"type\": \"number\" },\n        \"validation_errors\": { \"type\": \"null\" },\n        \"error\": { \"type\": \"null\" }\n    }\n}\n```\n"
+			},
+			"response": [
+				{
+					"name": "200",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5005/api/tasks/3ea40a96-045a-45ae-b526-8e7f515d335e/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5005",
+							"path": [
+								"api",
+								"tasks",
+								"3ea40a96-045a-45ae-b526-8e7f515d335e",
+								""
+							]
+						}
+					},
+					"status": "No Content",
+					"code": 204,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 09 Jul 2024 15:42:56 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						}
+					],
+					"cookie": [],
+					"body": null
+				},
+				{
+					"name": "400",
+					"originalRequest": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "127.0.0.1:5005/api/tasks/3ea40a96-045a-45a335e/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5005",
+							"path": [
+								"api",
+								"tasks",
+								"3ea40a96-045a-45a335e",
+								""
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 09 Jul 2024 15:49:21 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "80"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"result\": null,\n    \"success\": false,\n    \"code\": 400,\n    \"validation_errors\": null,\n    \"error\": null\n}"
+				}
+			]
+		},
+		{
+			"name": "Task Update",
+			"request": {
+				"method": "PATCH",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"title\":\"updated\"\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "127.0.0.1:5005/api/tasks/1/",
+					"host": [
+						"127",
+						"0",
+						"0",
+						"1"
+					],
+					"port": "5005",
+					"path": [
+						"api",
+						"tasks",
+						"1",
+						""
+					]
+				},
+				"description": "\n### Update Task Details\n\nThis endpoint allows you to update the details of a specific task.\n\n#### Request\n\n- Method: PATCH\n- URL: `127.0.0.1:5005/api/tasks/3ea40a96-045a-45ae-b526335e/`\n\n##### Request Body\n- Type: Raw (JSON)\n    - `title`: (string) The updated title of the task.\n\n#### Response\n\nThe response of this request follows the JSON schema below:\n\n```json\n{\n    \"type\": \"object\",\n    \"properties\": {\n        \"result\": {\n            \"type\": \"object\",\n            \"properties\": {\n                \"id\": {\n                    \"type\": \"string\"\n                },\n                \"title\": {\n                    \"type\": \"string\"\n                },\n                \"description\": {\n                    \"type\": \"string\"\n                },\n                \"status\": {\n                    \"type\": \"string\"\n                },\n                \"created_at\": {\n                    \"type\": \"string\"\n                },\n                \"updated_at\": {\n                    \"type\": \"string\"\n                }\n            }\n        },\n        \"success\": {\n            \"type\": \"boolean\"\n        },\n        \"code\": {\n            \"type\": \"integer\"\n        },\n        \"validation_errors\": {\n            \"type\": \"null\"\n        },\n        \"error\": {\n            \"type\": \"null\"\n        }\n    }\n}\n```\n"
+			},
+			"response": [
+				{
+					"name": "200",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"updated\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5005/api/tasks/3ea40a96-045a-45ae-b526-8e7f515d335e/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5005",
+							"path": [
+								"api",
+								"tasks",
+								"3ea40a96-045a-45ae-b526-8e7f515d335e",
+								""
+							]
+						}
+					},
+					"status": "OK",
+					"code": 200,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 09 Jul 2024 15:42:33 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "272"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"result\": {\n        \"id\": \"3ea40a96-045a-45ae-b526-8e7f515d335e\",\n        \"title\": \"updated\",\n        \"description\": \"des\",\n        \"status\": \"pending\",\n        \"created_at\": \"2024-07-09T19:08:55.994283+03:30\",\n        \"updated_at\": \"2024-07-09T19:12:34.08403+03:30\"\n    },\n    \"success\": true,\n    \"code\": 200,\n    \"validation_errors\": null,\n    \"error\": null\n}"
+				},
+				{
+					"name": "404",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"updated\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5005/api/tasks/3ea40a96-045a-45ae-b526-8e7f515d335e/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5005",
+							"path": [
+								"api",
+								"tasks",
+								"3ea40a96-045a-45ae-b526-8e7f515d335e",
+								""
+							]
+						}
+					},
+					"status": "Not Found",
+					"code": 404,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 09 Jul 2024 15:50:09 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "94"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"result\": null,\n    \"success\": false,\n    \"code\": 404,\n    \"validation_errors\": null,\n    \"error\": \"record not found\"\n}"
+				},
+				{
+					"name": "400",
+					"originalRequest": {
+						"method": "PATCH",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n    \"title\":\"updated\"\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "127.0.0.1:5005/api/tasks/3ea40a96-045a-45ae-b526335e/",
+							"host": [
+								"127",
+								"0",
+								"0",
+								"1"
+							],
+							"port": "5005",
+							"path": [
+								"api",
+								"tasks",
+								"3ea40a96-045a-45ae-b526335e",
+								""
+							]
+						}
+					},
+					"status": "Bad Request",
+					"code": 400,
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Date",
+							"value": "Tue, 09 Jul 2024 15:51:51 GMT"
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json"
+						},
+						{
+							"key": "Content-Length",
+							"value": "80"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"result\": null,\n    \"success\": false,\n    \"code\": 400,\n    \"validation_errors\": null,\n    \"error\": null\n}"
+				}
+			]
+		}
+	]
+}

@@ -1,0 +1,85 @@
+openapi: 3.0.0
+info:
+  title: Task-Management API
+  version: 1.0.0
+paths:
+  /api/health/:
+    get:
+      summary: Health Check
+      responses:
+        '200':
+          description: API is up and running
+  /api/tasks/:
+    get:
+      summary: List Tasks
+      responses:
+        '200':
+          description: A list of tasks
+    post:
+      summary: Create a Task
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+                description:
+                  type: string
+                status:
+                  type: string
+                  enum: [pending, completed, in_progress]
+      responses:
+        '201':
+          description: Task created
+  /api/tasks/{taskId}/:
+    get:
+      summary: Get a Task
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Details of a specific task
+        '404':
+          description: Task not found
+    patch:
+      summary: Update a Task
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              properties:
+                title:
+                  type: string
+      responses:
+        '200':
+          description: Task updated
+        '404':
+          description: Task not found
+    delete:
+      summary: Delete a Task
+      parameters:
+        - name: taskId
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '204':
+          description: Task deleted
+        '400':
+          description: Bad request

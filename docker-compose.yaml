@@ -1,5 +1,5 @@
 version: "3.9"
-name: task-management
+name: task_management
 services:
   app:
     container_name: app_container
