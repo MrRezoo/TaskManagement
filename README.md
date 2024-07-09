@@ -1,159 +1,228 @@
 # Task Management API
 
-This project is a simple Task Management API built with Go, Fiber, and PostgreSQL. It allows users to create, read, update, and delete tasks.
+This repository contains the Task Management API which provides endpoints to manage tasks including creating, retrieving, and deleting tasks.
 
 ## Table of Contents
 
-- [Features](#features)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Usage](#usage)
-- [API Endpoints](#api-endpoints)
-- [Configuration](#configuration)
-- [Running Tests](#running-tests)
-- [Docker Support](#docker-support)
-- [Contributing](#contributing)
-- [License](#license)
+- [Task Management API](#task-management-api)
+  - [Table of Contents](#table-of-contents)
+  - [Overview](#overview)
+  - [Installation](#installation)
+  - [API Endpoints](#api-endpoints)
+    - [Health Check](#health-check)
+    - [Retrieve All Tasks](#retrieve-all-tasks)
+    - [Create a New Task](#create-a-new-task)
+    - [Retrieve a Specific Task](#retrieve-a-specific-task)
+    - [Delete a Specific Task](#delete-a-specific-task)
+  - [Examples](#examples)
+    - [Health Check Example](#health-check-example)
+    - [Retrieve All Tasks Example](#retrieve-all-tasks-example)
+    - [Create a New Task Example](#create-a-new-task-example)
+    - [Retrieve a Specific Task Example](#retrieve-a-specific-task-example)
+    - [Delete a Specific Task Example](#delete-a-specific-task-example)
+  - [License](#license)
 
-## Features
+## Overview
 
-- Create, read, update, and delete tasks
-- Health check endpoint
-
-## Prerequisites
-
-- Go 1.18+
-- PostgreSQL
-- Docker (optional)
+The Task Management API provides a simple interface to manage tasks. The API allows you to perform CRUD (Create, Read, Update, Delete) operations on tasks.
 
 ## Installation
 
-### Clone the repository
+To set up the Task Management API locally:
 
-```sh
-git clone https://github.com/MrRezoo/task-management-api.git
-cd task-management-api
-```
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/MrRezoo/TaskManagement.git
+   cd TaskManagement
+   ```
 
-### Server Setup
+2. Install the dependencies:
+   ```sh
+   npm install
+   ```
 
-1. **Install Go dependencies**
+3. Start the server:
+   ```sh
+   npm start
+   ```
 
-    ```sh
-    go mod tidy
-    ```
-
-2. **Run the server**
-
-    ```sh
-    go run cmd/main.go
-    ```
-
-## Usage
-
-### Running the Server
-
-```sh
-go run cmd/main.go
-```
+The API will be available at `http://localhost:3000`.
 
 ## API Endpoints
 
 ### Health Check
 
-- **URL:** `/api/health`
-- **Method:** `GET`
-- **Responses:**
-    - `200 OK`
+**GET** `/api/health/`
 
-### Create Task
+Checks the health status of the API.
 
-- **URL:** `/api/tasks`
-- **Method:** `POST`
-- **Request Body:**
-  ```json
-  {
-    "title": "Task Title",
-    "description": "Task Description",
-    "status": "Pending"
-  }
-  ```
-- **Responses:**
-    - `201 Created`
-    - `400 Bad Request`
+#### Responses
+- `200 OK`: Health status of the API.
 
-### Get All Tasks
+### Retrieve All Tasks
 
-- **URL:** `/api/tasks`
-- **Method:** `GET`
-- **Responses:**
-    - `200 OK`
+**GET** `/api/tasks/`
 
-### Get Task by ID
+Retrieves a list of all tasks.
 
-- **URL:** `/api/tasks/:id`
-- **Method:** `GET`
-- **Responses:**
-    - `200 OK`
-    - `404 Not Found`
+#### Responses
+- `200 OK`: A list of tasks.
 
-### Update Task
+### Create a New Task
 
-- **URL:** `/api/tasks/:id`
-- **Method:** `PATCH`
-- **Request Body:**
-  ```json
-  {
-    "title": "Updated Title",
-    "description": "Updated Description",
-    "status": "In Progress"
-  }
-  ```
-- **Responses:**
-    - `200 OK`
-    - `400 Bad Request`
-    - `404 Not Found`
+**POST** `/api/tasks/`
 
-### Delete Task
+Creates a new task.
 
-- **URL:** `/api/tasks/:id`
-- **Method:** `DELETE`
-- **Responses:**
-    - `204 No Content`
-    - `404 Not Found`
+#### Request Body
+- `title` (string): Title of the task.
+- `description` (string): Description of the task.
+- `status` (string): Status of the task (`pending`, `completed`, `in_progress`).
 
-## Configuration
+#### Responses
+- `201 Created`: Task created successfully.
+- `400 Bad Request`: Invalid input.
 
-Configuration files are located in the `config` directory. Modify the `.yaml` files according to your environment.
+### Retrieve a Specific Task
 
-- `config-development.yaml`
-- `config-docker.yaml`
+**GET** `/api/tasks/{id}/`
 
-## Running Tests
+Retrieves a specific task by ID.
 
-To run the tests, use the following command:
+#### Path Parameters
+- `id` (string): ID of the task.
 
+#### Responses
+- `200 OK`: Task details.
+- `404 Not Found`: Task not found.
+
+### Delete a Specific Task
+
+**DELETE** `/api/tasks/{id}/`
+
+Deletes a specific task by ID.
+
+#### Path Parameters
+- `id` (string): ID of the task.
+
+#### Responses
+- `204 No Content`: Task deleted successfully.
+
+## Examples
+
+### Health Check Example
+
+**Request**
 ```sh
-go test ./...
+curl -X GET http://localhost:3000/api/health/
 ```
 
-## Docker Support
-
-To run the server using Docker, use the provided `docker-compose` file.
-
-### Build and Run
-
-```sh
-docker-compose up --build
+**Response**
+```json
+{
+  "message": "",
+  "success": true
+}
 ```
 
-## Contributing
+### Retrieve All Tasks Example
 
-Contributions are welcome! Please fork the repository and submit a pull request.
+**Request**
+```sh
+curl -X GET http://localhost:3000/api/tasks/
+```
+
+**Response**
+```json
+{
+  "result": [
+    {
+      "id": "3ea40a96-045a-45ae-b526-8e7f515d335e",
+      "title": "One",
+      "description": "des",
+      "status": "pending",
+      "created_at": "2024-07-09T19:08:55.994283+03:30",
+      "updated_at": "2024-07-09T19:08:55.994283+03:30"
+    }
+  ],
+  "success": true,
+  "code": 200,
+  "validation_errors": null,
+  "error": null
+}
+```
+
+### Create a New Task Example
+
+**Request**
+```sh
+curl -X POST http://localhost:3000/api/tasks/ \
+  -H "Content-Type: application/json" \
+  -d '{
+    "title": "One",
+    "description": "des",
+    "status": "pending"
+  }'
+```
+
+**Response**
+```json
+{
+  "result": {
+    "id": "3ea40a96-045a-45ae-b526-8e7f515d335e",
+    "title": "One",
+    "description": "des",
+    "status": "pending",
+    "created_at": "2024-07-09T19:08:55.994283+03:30",
+    "updated_at": "2024-07-09T19:08:55.994283+03:30"
+  },
+  "success": true,
+  "code": 201,
+  "validation_errors": null,
+  "error": null
+}
+```
+
+### Retrieve a Specific Task Example
+
+**Request**
+```sh
+curl -X GET http://localhost:3000/api/tasks/3ea40a96-045a-45ae-b526-8e7f515d335e/
+```
+
+**Response**
+```json
+{
+  "result": {
+    "id": "3ea40a96-045a-45ae-b526-8e7f515d335e",
+    "title": "One",
+    "description": "des",
+    "status": "pending",
+    "created_at": "2024-07-09T19:08:55.994283+03:30",
+    "updated_at": "2024-07-09T19:08:55.994283+03:30"
+  },
+  "success": true,
+  "code": 200,
+  "validation_errors": null,
+  "error": null
+}
+```
+
+### Delete a Specific Task Example
+
+**Request**
+```sh
+curl -X DELETE http://localhost:3000/api/tasks/3ea40a96-045a-45ae-b526-8e7f515d335e/
+```
+
+**Response**
+```
+204 No Content
+```
 
 ## License
 
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 ```
 
-This structure and documentation should provide a comprehensive guide to setting up and running your Task Management API project. Adjust paths, package names, and other details as needed.
+This README includes detailed explanations for each API endpoint along with examples of how to use them. Adjust the server URL (`http://localhost:3000`) and any other specific details as necessary to match your actual setup.
