@@ -1,5 +1,5 @@
 version: "3.9"
-name: TaskManagement
+name: task-management
 services:
   app:
     container_name: app_container
@@ -10,7 +10,7 @@ services:
     environment:
       - APP_ENV=docker
     depends_on:
-      - redis
+      - postgres
     ports:
       - "5005:5005"
     expose:
@@ -21,22 +21,40 @@ services:
       - app_network
     restart: unless-stopped
   postgres:
-    container_name: postgres_container
     image: postgres:16.2
+    container_name: postgres_container
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: postgres
       POSTGRES_DB: task_management
+      PGDATA: /data/postgres
     ports:
       - "5432:5432"
+    volumes:
+      - postgres:/data/postgres
     networks:
       - app_network
+    restart: unless-stopped
+
+  pgadmin:
+    image: dpage/pgadmin4
+    depends_on:
+      - postgres
+    container_name: pgadmin_container
+    environment:
+      PGADMIN_DEFAULT_EMAIL: admin@gmail.com
+      PGADMIN_DEFAULT_PASSWORD: admin
+    ports:
+      - "8090:80"
     volumes:
-      - postgres_data:/var/lib/postgresql/data
+      - pgadmin:/var/lib/pgadmin
+    networks:
+      - app_network
     restart: unless-stopped
 
 volumes:
-  redis:
+  postgres:
+  pgadmin:
 
 
 networks:
