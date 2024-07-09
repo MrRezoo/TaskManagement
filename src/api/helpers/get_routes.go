@@ -1,13 +1,13 @@
 package helpers
 
 import (
-	"fmt"
 	"github.com/gofiber/fiber/v2"
+	"log"
 	"sort"
 )
 
 func ListRoutes(app *fiber.App) {
-	fmt.Println("List of registered routes:")
+	log.Println("List of registered routes:")
 	routes := app.GetRoutes()
 	pathMethods := make(map[string][]string)
 	allowedMethods := []string{"GET", "POST", "PUT", "PATCH", "DELETE"}
@@ -23,6 +23,6 @@ func ListRoutes(app *fiber.App) {
 
 	for path, methods := range pathMethods {
 		sort.Strings(methods)
-		fmt.Printf("%s -> %s\n", path, methods)
+		log.Printf("%s -> %s\n", path, methods)
 	}
 }

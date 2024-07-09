@@ -43,6 +43,11 @@ func (h *TaskHandler) GetTasks(c *fiber.Ctx) error {
 
 func (h *TaskHandler) GetTask(c *fiber.Ctx) error {
 	id := c.Params("id")
+
+	if _, err := uuid.Parse(id); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(helpers.GenerateResponseWithValidationErrors(nil, false, fiber.StatusBadRequest, err))
+	}
+
 	var task models.Task
 	if result := db.DB.First(&task, "id = ?", id); result.Error != nil {
 		return c.Status(fiber.StatusNotFound).JSON(helpers.GenerateResponseWithError(nil, false, fiber.StatusNotFound, result.Error))
@@ -52,6 +57,11 @@ func (h *TaskHandler) GetTask(c *fiber.Ctx) error {
 
 func (h *TaskHandler) UpdateTask(c *fiber.Ctx) error {
 	id := c.Params("id")
+
+	if _, err := uuid.Parse(id); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(helpers.GenerateResponseWithValidationErrors(nil, false, fiber.StatusBadRequest, err))
+	}
+
 	var task models.Task
 	if result := db.DB.First(&task, "id = ?", id); result.Error != nil {
 		return c.Status(fiber.StatusNotFound).JSON(helpers.GenerateResponseWithError(nil, false, fiber.StatusNotFound, result.Error))
@@ -61,7 +71,6 @@ func (h *TaskHandler) UpdateTask(c *fiber.Ctx) error {
 		return c.Status(fiber.StatusBadRequest).JSON(helpers.GenerateResponseWithError(nil, false, fiber.StatusBadRequest, err))
 	}
 
-	// Validate the task
 	if err := validations.Validate.Struct(&task); err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(helpers.GenerateResponseWithValidationErrors(nil, false, fiber.StatusBadRequest, err))
 	}
@@ -74,6 +83,11 @@ func (h *TaskHandler) UpdateTask(c *fiber.Ctx) error {
 
 func (h *TaskHandler) DeleteTask(c *fiber.Ctx) error {
 	id := c.Params("id")
+
+	if _, err := uuid.Parse(id); err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(helpers.GenerateResponseWithValidationErrors(nil, false, fiber.StatusBadRequest, err))
+	}
+
 	if result := db.DB.Delete(&models.Task{}, "id = ?", id); result.Error != nil {
 		return c.Status(fiber.StatusNotFound).JSON(helpers.GenerateResponseWithError(nil, false, fiber.StatusNotFound, result.Error))
 	}

@@ -36,16 +36,22 @@ func enableUUIDExtension(db *gorm.DB) error {
 }
 
 func createDatabase(cfg *config.PostgresConfig) {
-	dsn := "host=" + cfg.Host + " user=" + cfg.User + " password=" + cfg.Password + " port=" + cfg.Port + " sslmode=" + cfg.SSLMode
+	dsn := "host=" + cfg.Host + " user=" + cfg.User + " password=" + cfg.Password + " port=" + cfg.Port + " sslmode=" + cfg.SSLMode + " dbname=postgres"
 	db, err := gorm.Open(postgres.Open(dsn), &gorm.Config{})
 	if err != nil {
-		log.Fatalf("Failed to connect to database: %v", err)
+		log.Fatalf("Failed to connect to default database: %v", err)
 	}
-	log.Println("Database connected")
 
-	err = db.Exec("CREATE DATABASE " + cfg.Name).Error
-	if err != nil {
-		log.Fatalf("Failed to create database: %v", err)
+	var dbName string
+	db.Raw("SELECT datname FROM pg_catalog.pg_database WHERE lower(datname) = lower(?)", cfg.Name).Scan(&dbName)
+
+	if dbName == "" {
+		err = db.Exec("CREATE DATABASE " + cfg.Name).Error
+		if err != nil {
+			log.Fatalf("Failed to create database: %v", err)
+		}
+		log.Println("Database created")
+	} else {
+		log.Println("Database already exists")
 	}
-	log.Println("Database created")
 }
